@@ -11,15 +11,18 @@ import { fontSizes, images, colors } from "../contants";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useEffect, useState } from "react";
 import { isValidEmail, isValidPassword } from "../utilies/Validations";
+import { database } from "./../firebase/firebase";
+import { getDatabase, ref, set, get, child } from "firebase/database";
 
 export default function Login(props) {
   const [keyboardIsShow, setKeyboardIsShow] = useState(false);
 
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
+  const [userId, setUserId] = useState([]);
 
-  const [email, setEmail] = useState(false);
-  const [password, setPassword] = useState(false);
+  const [email, setEmail] = useState(" ");
+  const [password, setPassword] = useState(" ");
   const isValidOk = () =>
     email.length > 0 &&
     password.length > 0 &&
@@ -33,7 +36,27 @@ export default function Login(props) {
     Keyboard.addListener("keyboardDidHide", () => {
       setKeyboardIsShow(false);
     });
-  });
+    const dbRef = ref(database);
+    get(child(dbRef, `User`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setUserId(snapshot.val());
+        } else {
+          console.log("No data available");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleLogin = () => {
+    if (email == userId.email && password == userId.password) {
+      navigate("UITab");
+    } else {
+      alert("Email or password is incorrect ! \nPlease test again");
+    }
+  };
 
   const { navigation, router } = props;
   const { navigate, goBack } = navigation;
@@ -152,10 +175,8 @@ export default function Login(props) {
               alignSelf: "center",
               borderRadius: 15,
             }}
-            // disabled={isValidOk() == false}
-            onPress={() => {
-              navigate("UITab");
-            }}
+            disabled={isValidOk() == false}
+            onPress={handleLogin}
           >
             <Text
               style={{

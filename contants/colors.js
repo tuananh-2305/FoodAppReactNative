@@ -11,4 +11,5 @@ export default {
   setting: "#00bfff",
   switch: "#e2e2e2",
   white: "#ffffff",
+  message: "rgba(0,0,0,0.1)",
 };

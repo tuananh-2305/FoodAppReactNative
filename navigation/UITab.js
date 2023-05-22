@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FoodList, Profile, Settings } from "../screens";
+import { FoodList, Profile, Settings, Chat } from "../screens";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { colors, fontSizes } from "../contants";
 const Tab = createBottomTabNavigator();
@@ -23,6 +23,8 @@ const screenOptions = ({ route }) => ({
             ? "user"
             : route.name == "Settings"
             ? "cogs"
+            : route.name == "Chat"
+            ? "comment"
             : ""
         }
         size={23}
@@ -39,6 +41,17 @@ export default function UITab() {
         component={FoodList}
         options={{
           tabBarLabel: "Foods",
+          tabBarLabelStyle: {
+            fontSize: fontSizes.h6,
+            fontWeight: "bold",
+          },
+        }}
+      />
+      <Tab.Screen
+        name={"Chat"}
+        component={Chat}
+        options={{
+          tabBarLabel: "Chat",
           tabBarLabelStyle: {
             fontSize: fontSizes.h6,
             fontWeight: "bold",

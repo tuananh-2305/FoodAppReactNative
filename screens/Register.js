@@ -18,8 +18,8 @@ export default function Register() {
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
 
-  const [email, setEmail] = useState(false);
-  const [password, setPassword] = useState(false);
+  const [email, setEmail] = useState(" ");
+  const [password, setPassword] = useState(" ");
   const isValidOk = () =>
     email.length > 0 &&
     password.length > 0 &&
@@ -34,6 +34,10 @@ export default function Register() {
       setKeyboardIsShow(false);
     });
   });
+
+  const handleRegister = () => {
+    alert(`email : ${email} , password: ${password}`);
+  };
   return (
     <View
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -201,9 +205,7 @@ export default function Register() {
               borderRadius: 15,
             }}
             disabled={isValidOk() == false}
-            onPress={() => {
-              alert(`email : ${email} , password: ${password}`);
-            }}
+            onPress={handleRegister}
           >
             <Text
               style={{

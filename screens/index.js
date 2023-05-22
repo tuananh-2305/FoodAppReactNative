@@ -4,4 +4,15 @@ import Register from "./Register";
 import FoodList from "./FoodList/FoodList";
 import Profile from "./Profile";
 import Settings from "./Settings";
-export { Welcome, Login, Register, FoodList, Profile, Settings };
+import Chat from "./Chat/Chat";
+import Messenger from "./Messenger/Messenger";
+export {
+  Welcome,
+  Login,
+  Register,
+  FoodList,
+  Profile,
+  Settings,
+  Chat,
+  Messenger,
+};

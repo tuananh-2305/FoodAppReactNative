@@ -1,5 +1,6 @@
 import { View, Text } from "react-native";
 import { colors, fontSizes } from "../contants";
+import Icon from "react-native-vector-icons/FontAwesome5";
 export default function UIHeader(props) {
   const { title, leftIcon, rightIcon, onPressLeftIcon, onPressRightIcon } =
     props;
@@ -11,13 +12,14 @@ export default function UIHeader(props) {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        paddingHorizontal: 5,
       }}
     >
       {leftIcon != undefined ? (
         <Icon
           name={leftIcon}
           style={{ padding: 10 }}
-          size={23}
+          size={20}
           color={"white"}
           onPress={onPressLeftIcon}
         />

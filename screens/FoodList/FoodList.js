@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,76 +11,26 @@ import {
 import FoodItem from "./FoodItem";
 import { colors, fontSizes } from "../../contants";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { database } from "../../firebase/firebase";
+import { getDatabase, ref, set, get, child } from "firebase/database";
 export default function FoodList() {
-  const foods = [
-    {
-      name: "Gazpacho",
-      url: "https://images.immediate.co.uk/production/volatile/sites/30/2015/02/Top-10-foods-to-try-in-Spain-1d2b4ef.jpg?resize=960,872",
-      status: "Opening soon",
-      price: 120,
-      website: "https://www.taste.com.au/",
-      sosialNetworks: {
-        facebook: "https://www.facebook.com/",
-        twitter: "https://www.facebook.com/",
-        instagram: "https://www.facebook.com/",
-      },
-    },
-    {
-      name: "Paella",
-      url: "https://img.delicious.com.au/YaMAptn3/del/2018/11/bacon-and-egg-paella-96823-2.jpg",
-      status: "Opening now",
-      price: 150,
-      website: "https://www.taste.com.au/",
-      sosialNetworks: {
-        twitter: "https://www.facebook.com/",
-        instagram: "https://www.facebook.com/",
-      },
-    },
-    {
-      name: "Tortilla Española",
-      url: "https://www.bluristorante.com/wp-content/uploads/2019/03/9-Traditional-Italian-Food-Dishes-You-Will-Love.jpg",
-      status: "Closing soon",
-      price: 220,
-      website: "https://www.taste.com.au/",
-      sosialNetworks: {
-        twitter: "https://www.facebook.com/",
-      },
-    },
-    {
-      name: "Gambas al ajillo",
-      url: "https://www.expatica.com/app/uploads/sites/5/2014/05/french-food-1920x1080.jpg",
-      status: "Comming soon",
-      price: 180,
-      website: "https://www.taste.com.au/",
-      sosialNetworks: {
-        facebook: "https://www.facebook.com/",
-        twitter: "https://www.facebook.com/",
-        instagram: "https://www.facebook.com/",
-      },
-    },
-    {
-      name: "Salmon en papillote",
-      url: "https://sukhis.com/app/uploads/2022/04/image3-4.jpg",
-      status: "Comming soon",
-      price: 180,
-      website: "https://www.taste.com.au/",
-      sosialNetworks: {
-        facebook: "https://www.facebook.com/",
-        instagram: "https://www.facebook.com/",
-      },
-    },
-    {
-      name: "Bouillabaisse",
-      url: "https://static.thehoneycombers.com/wp-content/uploads/sites/2/2021/12/spanish-restaurants-singapore-paella.png",
-      status: "Comming soon",
-      price: 180,
-      website: "https://www.taste.com.au/",
-      sosialNetworks: {
-        facebook: "https://www.facebook.com/",
-        instagram: "https://www.facebook.com/",
-      },
-    },
-  ];
+  const [foods, setFoods] = useState([]);
+  const [searchText, setSearchText] = useState(" ");
+  const dbRef = ref(database);
+  useEffect(() => {
+    get(child(dbRef, `FoodList`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          return setFoods(snapshot.val());
+        } else {
+          console.log("No data available");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   const categories = [
     {
       name: "BBQ",
@@ -123,7 +73,7 @@ export default function FoodList() {
       url: "https://m.media-amazon.com/images/I/81s-rWYsoKL._SX466_.jpg",
     },
   ];
-  const [searchText, setSearchText] = useState(" ");
+
   const filterFoods = () =>
     foods.filter((food) =>
       food.name.toLowerCase().includes(searchText.toLowerCase())
@@ -172,7 +122,9 @@ export default function FoodList() {
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
-                  onPress={() => alert(`choose ${item.name}`)}
+                  onPress={() =>
+                    alert(`choose ${item.name == undefined ? " " : item.name}`)
+                  }
                   style={{
                     marginHorizontal: 10,
                     alignItems: "center",
@@ -187,7 +139,7 @@ export default function FoodList() {
                       borderRadius: 25,
                     }}
                     source={{
-                      uri: item.url,
+                      uri: item.url == undefined ? " " : item.url,
                     }}
                   />
                   <Text style={{ fontSize: fontSizes.h6 }}>{item.name}</Text>
